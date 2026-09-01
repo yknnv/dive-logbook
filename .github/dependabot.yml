@@ -1,13 +1,8 @@
 version: 2
 updates:
-  - package-ecosystem: pip
-    directory: /
-    schedule:
-      interval: monthly
-    open-pull-requests-limit: 3
-    commit-message:
-      prefix: "deps"
-
+  # Только GitHub Actions: у них есть версии, которые действительно надо
+  # двигать. В requirements.txt указаны нижние границы, а не пины —
+  # поднимать их автоматически нет смысла.
   - package-ecosystem: github-actions
     directory: /
     schedule:
