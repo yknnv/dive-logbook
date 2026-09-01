@@ -41,7 +41,7 @@ jobs:
           PY
 
       - name: Выложить PDF как артефакт
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dive-logbook-pdf
           path: dist/*.pdf
