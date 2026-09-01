@@ -1,0 +1,53 @@
+name: Фактическая ошибка в справочнике
+description: Число, процедура или формулировка в справочном разделе неверны или вводят в заблуждение
+title: "Факт: "
+labels: ["содержание", "важное"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Самый ценный вид issue. Книгу печатают и берут с собой — ошибка
+        в справочнике доезжает до воды.
+
+  - type: input
+    id: page
+    attributes:
+      label: Где
+      description: Заголовок страницы, а не номер — номера смещаются при любом изменении объёма.
+      placeholder: "ПЛАНИРОВАНИЕ ГАЗА / GAS PLANNING, подраздел «Аварийный резерв»"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: Что написано сейчас
+      description: Точная цитата.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Как должно быть
+    validations:
+      required: true
+
+  - type: textarea
+    id: source
+    attributes:
+      label: Источник
+      description: Стандарт обучающей организации, руководство производителя, таблица, учебник. Со ссылкой или выходными данными.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Насколько это критично
+      options:
+        - CRITICAL — может привести к неверному решению под водой
+        - SHOULD — вводит в заблуждение, но не опасно
+        - OPTIONAL — неточность формулировки
+    validations:
+      required: true

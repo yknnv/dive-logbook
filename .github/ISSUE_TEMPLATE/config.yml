@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Как печатать и во что переплетать
+    url: https://github.com/yknnv/dive-logbook#печать
+    about: Бумага, поля, перфорация, файл с припуском — всё это описано в README.
+  - name: Правила вёрстки и как внести правку
+    url: https://github.com/yknnv/dive-logbook/blob/main/CONTRIBUTING.md
+    about: Инварианты, формат постановки правки, что проверить перед PR.

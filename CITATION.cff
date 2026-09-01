@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+title: "DIVE logbook — printable A5 scuba diving log book"
+message: "If you use or adapt this logbook, please cite it."
+type: software
+authors:
+  - family-names: Kononov
+    given-names: Yury
+    website: "https://ykononov.com"
+repository-code: "https://github.com/yknnv/dive-logbook"
+abstract: >-
+  A printable A5 scuba diving logbook, quick reference and emergency card,
+  typeset entirely in Python with reportlab. 130 pages, 42 dive record
+  spreads, bilingual Russian/English field labels, single-colour print,
+  punched for ring binding.
+keywords:
+  - scuba diving
+  - dive log
+  - logbook
+  - printable pdf
+  - typesetting
+  - reportlab
+license: MIT
+version: "1.0"
+date-released: "2026-09-01"

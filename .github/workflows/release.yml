@@ -1,0 +1,35 @@
+name: Релиз
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Собрать и приложить PDF к релизу
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Установить зависимости
+        run: pip install -r requirements.txt
+
+      - name: Собрать и проверить
+        run: ./build.sh
+
+      - name: Создать релиз
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" dist/*.pdf \
+            --title "DIVE logbook ${GITHUB_REF_NAME}" \
+            --generate-notes

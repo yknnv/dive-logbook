@@ -1,0 +1,28 @@
+DIVE logbook — что под какой лицензией
+DIVE logbook — what is licensed how
+
+--------------------------------------------------------------------
+Исходный код / Source code
+    src/, tools/, build.sh, конфигурация сборки
+    MIT — см. LICENSE
+
+Содержимое книги / Book content
+    текст справочного раздела, векторные схемы, иллюстрации
+    в assets/images/, собранные PDF в dist/ и в релизах
+    CC BY-NC-SA 4.0 — см. LICENSE-CONTENT
+    https://creativecommons.org/licenses/by-nc-sa/4.0/
+    Указание авторства: Yury Kononov, https://github.com/yknnv/dive-logbook
+
+Шрифт / Typeface
+    assets/fonts/Carlito-Regular.ttf, Carlito-Bold.ttf
+    SIL Open Font License 1.1 — см. assets/fonts/Carlito-COPYRIGHT.txt
+    Автор шрифта: Łukasz Dziedzic. Проектом не изменялся.
+--------------------------------------------------------------------
+
+Коротко: код берите как хотите. Книгу можно печатать для себя, для
+клуба и для группы, менять и раздавать — но не продавать, и с той же
+лицензией у производных. Нужна печать на продажу — напишите автору.
+
+Short version: the code is yours to take. The book may be printed,
+modified and shared for non-commercial use under the same licence.
+For commercial printing, ask the author.

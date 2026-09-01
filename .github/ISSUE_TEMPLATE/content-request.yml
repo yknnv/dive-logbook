@@ -1,0 +1,38 @@
+name: Предложить страницу или поле
+description: Не хватает темы в справочнике или поля в карточке записи
+title: "Предложение: "
+labels: ["содержание"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Что предлагаете
+      options:
+        - Новая страница справочника
+        - Новое поле в карточке записи
+        - Новая схема или иллюстрация
+        - Другое
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: Что именно
+      description: Содержание страницы или название поля, по-русски и по-английски.
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Зачем
+      description: Какой случай на воде или после погружения это закрывает.
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        Объём книги фиксирован и чётен: страница добавляется не бесплатно.
+        Если предлагаете страницу — подумайте, что можно ужать взамен.

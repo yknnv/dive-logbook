@@ -1,0 +1,37 @@
+name: Ошибка вёрстки
+description: Наложение, выход за поля, разъехавшиеся колонки, обрезанная схема
+title: "Вёрстка: "
+labels: ["вёрстка"]
+body:
+  - type: input
+    id: page
+    attributes:
+      label: Где
+      description: Заголовок страницы и номер страницы в PDF.
+      placeholder: "Разворот записи, левая полоса, строка «ПРОФИЛЬ ПОГРУЖЕНИЯ» — с. 46"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: Что не так
+      description: Приложите скриншот из PDF — так быстрее всего.
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Версия или коммит
+      placeholder: "v1.0 из релиза / собрано из main, коммит abc1234"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checked
+    attributes:
+      label: Проверено
+      options:
+        - label: "Собрано локально: `./build.sh` прошёл, а ошибка всё равно видна"
+        - label: "`python3 src/check_margins.py dist/dive-logbook-A5-final.pdf` про эту ошибку молчит"

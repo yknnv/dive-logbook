@@ -1,0 +1,49 @@
+name: Сборка
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Собрать книгу и проверить макет
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Установить зависимости
+        run: pip install -r requirements.txt
+
+      - name: Собрать и проверить
+        run: ./build.sh
+
+      - name: Проверить число страниц
+        run: |
+          python3 - <<'PY'
+          import pdfplumber, sys
+          with pdfplumber.open("dist/dive-logbook-A5-final.pdf") as pdf:
+              n = len(pdf.pages)
+          print("страниц:", n)
+          if n % 2:
+              sys.exit("нечётное число страниц — двусторонняя печать разъедется")
+          PY
+
+      - name: Выложить PDF как артефакт
+        uses: actions/upload-artifact@v4
+        with:
+          name: dive-logbook-pdf
+          path: dist/*.pdf
+          retention-days: 30
+          if-no-files-found: error
