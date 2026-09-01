@@ -5,7 +5,14 @@
 """
 
 import math
+import os
+
 from reportlab.lib.units import mm
+from reportlab.lib.utils import ImageReader
+
+# Растровые элементы схем: лодки, суда, фигуры. Лежат рядом с иллюстрациями.
+ELEM_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                        "assets", "images")
 
 
 def palette(ctx):
@@ -20,6 +27,33 @@ def palette(ctx):
 def _t(P, c, x, y, s, size=5.6, color=None, font=None, align="l", space=0.2):
     return P["txt"](c, x, y, s, font or P["LBL"], size,
                     color or P["LABEL"], space, align)
+
+
+def element(c, name, cx, cy, ang, h, mirror=False):
+    """Растровый элемент схемы: ставит PNG центром в (cx, cy), повёрнутым
+    на ang градусов по часовой, вписанным в высоту h.
+
+    Элементы рисуются в канонической ориентации — нос лодки строго вверх —
+    и поворачиваются здесь: угол задаёт код, а не картинка. mirror отражает
+    по горизонтали, чтобы один файл обслуживал оба галса.
+
+    Возвращает False, если файла нет: вызывающий рисует вектор как раньше.
+    Поэтому сборка не ломается, пока элементы не отрисованы.
+    """
+    path = os.path.join(ELEM_DIR, name if name.endswith(".png") else name + ".png")
+    if not os.path.exists(path):
+        return False
+    ir = ImageReader(path)
+    iw, ih = ir.getSize()
+    dw, dh = iw * h / ih, h
+    c.saveState()
+    c.translate(cx, cy)
+    c.rotate(-ang)
+    if mirror:
+        c.scale(-1, 1)
+    c.drawImage(ir, -dw / 2, -dh / 2, dw, dh, mask="auto")
+    c.restoreState()
+    return True
 
 
 def arrow(c, P, x0, y0, x1, y1, color=None, lw=0.7, head=1.9 * mm, dash=None):
@@ -40,9 +74,20 @@ def arrow(c, P, x0, y0, x1, y1, color=None, lw=0.7, head=1.9 * mm, dash=None):
     c.drawPath(p, stroke=0, fill=1)
 
 
-def boat(c, P, cx, cy, ang, L, color=None, sail=None, fill=False):
+def boat(c, P, cx, cy, ang, L, color=None, sail=None, fill=False, el=None):
     """Корпус сверху, нос по умолчанию вверх. ang в градусах, по часовой.
-    sail: None — без паруса, +1 — гик на правый борт, -1 — на левый."""
+    sail: None — без паруса, +1 — гик на правый борт, -1 — на левый.
+
+    el задаёт имя растрового элемента. Если файл есть, рисуется он; если
+    нет — векторный силуэт, как и раньше. Отрицательный sail отражает
+    элемент по горизонтали: один файл на оба галса.
+
+    Умолчания у el нет намеренно. Ракурс задаёт схема, а не функция:
+    на курсах относительно ветра лодка видна сверху, на якорной стоянке
+    сбоку. Подставленный по догадке элемент встал бы не тем ракурсом.
+    """
+    if el and element(c, el, cx, cy, ang, L, mirror=(sail == -1)):
+        return
     col = color or P["INK"]
     c.saveState()
     c.translate(cx, cy)
@@ -303,8 +348,10 @@ def fig_lost_buddy(c, P, x, y, w):
                       cx + 11 * mm * math.cos(math.radians(a)),
                       by + 11 * mm * math.sin(math.radians(a)),
                       P["LABEL2"], 0.4, 1.2 * mm)
-            c.setFillColor(P["ACCENT"])
-            c.circle(cx, by, 1.6 * mm, stroke=0, fill=1)
+            # Дайвер элементом, если он отрисован; иначе точка, как раньше.
+            if not element(c, "e-diver-top", cx, by, 0, 11 * mm):
+                c.setFillColor(P["ACCENT"])
+                c.circle(cx, by, 1.6 * mm, stroke=0, fill=1)
         elif i == 1:
             c.setStrokeColor(P["RULE"])
             c.setLineWidth(0.6)
@@ -392,17 +439,19 @@ def fig_points_of_sail(c, P, x, y, w):
     _t(P, c, cx, cy + R * 0.20 - 4 * mm, "ИДТИ НЕЛЬЗЯ", 4.6, P["LABEL2"],
        P["LBL"], "c", 0.4)
 
-    items = [(45, "БЕЙДЕВИНД", "close hauled", 1),
-             (90, "ГАЛФВИНД", "beam reach", 1),
-             (135, "БАКШТАГ", "broad reach", 1),
-             (180, "ФОРДЕВИНД", "running", 1),
-             (-45, "БЕЙДЕВИНД", "close hauled", -1),
-             (-90, "ГАЛФВИНД", "beam reach", -1),
-             (-135, "БАКШТАГ", "broad reach", -1)]
-    for ang, ru, en, side in items:
+    # Курс задаёт не только положение на круге, но и обтяжку парусов,
+    # поэтому у каждого свой элемент. Левая половина — тот же файл зеркально.
+    items = [(45, "БЕЙДЕВИНД", "close hauled", 1, "e-boat-close-hauled"),
+             (90, "ГАЛФВИНД", "beam reach", 1, "e-boat-beam-reach"),
+             (135, "БАКШТАГ", "broad reach", 1, "e-boat-broad-reach"),
+             (180, "ФОРДЕВИНД", "running", 1, "e-boat-running"),
+             (-45, "БЕЙДЕВИНД", "close hauled", -1, "e-boat-close-hauled"),
+             (-90, "ГАЛФВИНД", "beam reach", -1, "e-boat-beam-reach"),
+             (-135, "БАКШТАГ", "broad reach", -1, "e-boat-broad-reach")]
+    for ang, ru, en, side, el in items:
         bxp = cx + (R * 0.62) * math.sin(math.radians(ang))
         byp = cy + (R * 0.62) * math.cos(math.radians(ang))
-        boat(c, P, bxp, byp, ang, 11 * mm, sail=side)
+        boat(c, P, bxp, byp, ang, 11 * mm, sail=side, el=el)
         lx = cx + (R + 4 * mm) * math.sin(math.radians(ang))
         ly = cy + (R + 4 * mm) * math.cos(math.radians(ang))
         al = "l" if ang > 0 else ("r" if ang < 0 else "c")
