@@ -3,4 +3,4 @@ Pillow>=10.0
 numpy>=1.24
 
 # только для проверки макета
-pdfplumber>=0.11
+pdfplumber>=0.11.10
