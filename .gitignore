@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Сборка вне dist/: промежуточные и черновые PDF
+dist/*.tmp.pdf
+dist/draft-*.pdf
+
+# Подготовка иллюстраций: сырьё до prepare_illustrations.py
+assets/images/_raw/
+
+# Редакторы и ОС
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

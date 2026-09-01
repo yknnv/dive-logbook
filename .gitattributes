@@ -1,0 +1,21 @@
+* text=auto eol=lf
+
+*.py    text diff=python
+*.md    text
+*.sh    text eol=lf
+*.txt   text
+
+*.pdf   binary
+*.png   binary
+*.jpg   binary
+*.ttf   binary
+
+# Собранные PDF нечитаемы в диффе — не раздувать вывод git
+dist/*.pdf -diff
+
+# Классификация репозитория на GitHub: шрифты и картинки не код,
+# в статистике языков им делать нечего
+assets/fonts/**   linguist-vendored
+assets/images/**  linguist-vendored
+docs/preview/**   linguist-documentation
+dist/**           linguist-generated
