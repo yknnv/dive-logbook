@@ -778,7 +778,10 @@ def punch_template(path):
 
 
 if __name__ == "__main__":
-    n = build(os.path.join(_ROOT, "dist", "dive-logbook-A5-final.pdf"))
-    build(os.path.join(_ROOT, "dist", "dive-logbook-A5-final-bleed3mm-cropmarks.pdf"), bleed=3 * mm, marks=True)
-    punch_template(os.path.join(_ROOT, "dist", "punch-template-A5.pdf"))
+    # dist/ не лежит в репозитории, в свежем клоне его нет
+    _DIST = os.path.join(_ROOT, "dist")
+    os.makedirs(_DIST, exist_ok=True)
+    n = build(os.path.join(_DIST, "dive-logbook-A5-final.pdf"))
+    build(os.path.join(_DIST, "dive-logbook-A5-final-bleed3mm-cropmarks.pdf"), bleed=3 * mm, marks=True)
+    punch_template(os.path.join(_DIST, "punch-template-A5.pdf"))
     print("страниц:", n, "| погружений:", N_DIVES)

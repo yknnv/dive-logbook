@@ -52,8 +52,9 @@ A sister project for another discipline: `sail-logbook`.
 
 ## Download and print
 
-Ready-made PDFs are on the [latest release page](https://github.com/yknnv/dive-logbook/releases/latest)
-and also in [`dist/`](dist/).
+Ready-made PDFs are on the [latest release page](https://github.com/yknnv/dive-logbook/releases/latest) —
+nothing to build. They are not committed to the repository: every rebuild
+would add 12 MB of binary to the history.
 
 | file | what for |
 |---|---|
@@ -76,9 +77,9 @@ pip install -r requirements.txt
 ./build.sh
 ```
 
-Requires Python 3.10+. Output lands in `dist/`. The build runs the layout
-checks on its own: anything outside the type area, horizontal glyph overlaps,
-vertical word overlaps.
+Requires Python 3.10+. Output lands in `dist/`, which is gitignored. The
+build runs the layout checks on its own: anything outside the type area,
+horizontal glyph overlaps, vertical word overlaps.
 
 ### Settings you can change without touching the layout
 
@@ -107,7 +108,7 @@ src/figures.py        vector diagrams
 src/check_margins.py  margin and overlap checks
 assets/fonts/         Carlito, SIL OFL 1.1
 assets/images/        illustrations, monochrome PNG
-dist/                 built PDFs
+dist/                 build output, not committed
 docs/                 illustration brief template, page previews
 tools/                illustration preparation
 CLAUDE.md             instructions for an AI agent working on the book
